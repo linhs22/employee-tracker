@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+const figlet = require('figlet');
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -19,7 +20,12 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     // run the start function after the connection is made to prompt the use
-    askQuestions();
+    figlet('Employee Manager', function(er, data) {
+        if (er) return;
+        console.log(data);
+        askQuestions();
+    });
+
 });
 
 function askQuestions() {
@@ -166,7 +172,7 @@ function addEmployee() {
         {
             type: "number",
             name: "managerId",
-            message: "What is the employees manager's ID? (If employee had no manager insert NULL)"
+            message: "What is the employees manager's ID?"
         }
     ]).then(function(answers) {
         // console.log(rangedAnswers);
