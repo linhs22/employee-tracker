@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 
     // Your password
     password: "password",
-    database: "top_songsDB"
+    database: "employee_trackerDB"
 });
 
 connection.connect(function(err) {
@@ -27,54 +27,24 @@ function askQuestions() {
         message: "What would you like to do?",
         type: "list",
         choices: [
-            "view all employees",
-            "view all employees by department",
-            "view all employees by manager",
-            "add employees",
-            "update employee role",
-            "update employee manager",
-            "view all roles",
-            "add role",
-            "remove role"
+            "View departments, roles, employees",
+            "add to tables",
+            "update emplpoye roles"
         ],
         name: "choice"
     }).then(answers => {
         // console.log(answers);
         switch (answers.choice) {
-            case "view all employees":
-                viewAllEmployees()
+            case "View departments, roles, employees":
+                viewTables()
                 break;
 
-            case "view all employees by department":
-                allEmployeesByDepartment()
+            case "add to tables":
+                addTables()
                 break;
 
-            case "view all employees by manager":
-                allEmployeesByManager()
-                break;
-
-            case "add employees":
-                addEmployees()
-                break;
-
-            case "update employee role":
-                updateEmployeeRole()
-                break;
-
-            case "update employee manager":
-                updateEmployeeManager()
-                break;
-
-            case "view all roles":
-                viewAllRoles()
-                break;
-
-            case "add role":
-                addRole()
-                break;
-
-            case "remove role":
-                removeRole()
+            case "update employee roles":
+                updateRoles()
                 break;
 
             default:
@@ -83,4 +53,15 @@ function askQuestions() {
         }
     })
 
+}
+
+function viewTables() {
+    connection.query(`SELECT employee.id,employee.first_name, employee.last_name, title, salary, CONCAT (manager.first_name, ' ', manager.last_name) AS manager FROM employee 
+    JOIN role on employee.role_id = role.id
+    JOIN department ON role.department_id = department.id
+    LEFT JOIN employee AS manager ON employee.manager_id = manager.id;`, function(err, data) {
+        if (err) throw err;
+        console.table(data);
+        askQuestions();
+    })
 }
