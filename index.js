@@ -199,7 +199,7 @@ function addDepartments() {
     })
 }
 
-function updateRoles() {
+function addRole() {
     inquirer.prompt([{
             type: "input",
             name: "role",
