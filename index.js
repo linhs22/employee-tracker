@@ -202,23 +202,22 @@ function addDepartments() {
 function addRole() {
     inquirer.prompt([{
             type: "input",
-            name: "role",
-            message: "What is the new role of this employee?"
+            name: "title",
+            message: "What is the title of the new role?"
+        },
+        {
+            type: "number",
+            name: "salary",
+            message: "What is the salary for this role?"
         },
         {
             type: "number",
             name: "id",
-            message: "What is the ID of the person whose role you want change?"
+            message: "What is the department ID for this role?"
         },
     ]).then(function(answers) {
         // console.log(rangedAnswers);
-        connection.query('UPDATE products SET ? WHERE ?', [{
-                rol: 100
-            },
-            {
-                flavor: "Rocky Road"
-            }
-        ], function(err, data) {
+        connection.query('INSERT INTO role (title,salary,department_id) VALUES (?,?,?)', [answers.title, answers.salary, answers.id], function(err, data) {
             if (err) throw err;
             console.table("Successfully Inserted");
             askQuestions();
